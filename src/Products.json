@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "image": "/Images/pro-1-1.webp",
+        "secondimage": "/Images/pro-1.webp",
+        "Productname": "ROG Harpe Ace Mini",
+        "price": "$109.99",
+        "tags": "New"
+    },
+    {
+        "id": 2,
+        "image": "/Images/pro-2-1.webp",
+        "secondimage": "/Images/pro-2.webp",
+        "Productname": "ROG Strix Impact III Wireless",
+        "price": "$139.99",
+        "tags": "New"
+    },
+    {
+        "id": 3,
+        "image": "/Images/pro-3-1.webp",
+        "secondimage": "/Images/pro-3.webp",
+        "Productname": "ROG Strix Impact III",
+        "price": "$169.99",
+        "tags": "New"
+    },
+    {
+        "id": 4,
+        "image": "/Images/pro-4-1.webp",
+        "secondimage": "/Images/pro-4.webp",
+        "Productname": "ROG Falchion Ace HFX Gaming Keyboard",
+        "price": "$199.99",
+        "tags": "New"
+    },
+    {
+        "id": 5,
+        "image": "/Images/pro-5-1.webp",
+        "secondimage": "/Images/pro-5.webp",
+        "Productname": "ROG Strix Scope II",
+        "price": "$189.99",
+        "tags": "New"
+    },
+    {
+        "id": 6,
+        "image": "/Images/pro-6-1.webp",
+        "secondimage": "/Images/pro-6.webp",
+        "Productname": "ROG Strix Scope II RX",
+        "price": "$159.99",
+        "tags": "New"
+    },
+    {
+        "id": 7,
+        "image": "/Images/pro-7-1.webp",
+        "secondimage": "/Images/pro-7.webp",
+        "Productname": "ROG Falchion RX Low Profile",
+        "price": "$199.99",
+        "tags": "New"
+    },
+    {
+        "id": 8,
+        "image": "/Images/pro-8-1.webp",
+        "secondimage": "/Images/pro-8.webp",
+        "Productname": "Womier RD75 Pro Quick",
+        "price": "$189.99",
+        "tags": "New"
+    },
+    {
+        "id": 9,
+        "image": "/Images/pro-9-1.webp",
+        "secondimage": "/Images/pro-9.webp",
+        "Productname": "Womier ERA75 ",
+        "price": "$200",
+        "tags": "New"
+    }    
+]
