@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 function Nav() {
   const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
   const location = useLocation();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const updateCounts = () => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -62,14 +64,21 @@ function Nav() {
               </a>
             </li>
             <li className="nav-item">
-              <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal">
-                <i className="bi bi-person fs-5 text-dark"></i>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                <i className="bi bi-box-arrow-in-right fs-5 text-dark"></i>
-              </a>
+              {isAuthenticated ? (
+                <div className="dropdown">
+                  <a className="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i className="bi bi-person fs-5 text-dark"></i>
+                    <span className="ms-1">{user?.name}</span>
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li><a className="dropdown-item" href="#" onClick={logout}>Logout</a></li>
+                  </ul>
+                </div>
+              ) : (
+                <Link to="/login">
+                  <i className="bi bi-person fs-5 text-dark"></i>
+                </Link>
+              )}
             </li>
             <li className="nav-item position-relative">
               <Link to="/wishlist" className={isActive('/wishlist') ? "active" : ""}>
@@ -122,14 +131,21 @@ function Nav() {
                 </a>
               </li>
               <li className="nav-item">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal">
-                  <i className="bi bi-person fs-5 text-dark"></i>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                  <i className="bi bi-box-arrow-in-right fs-5 text-dark"></i>
-                </a>
+                {isAuthenticated ? (
+                  <div className="dropdown">
+                    <a className="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                      <i className="bi bi-person fs-5 text-dark"></i>
+                      <span className="ms-1">{user?.name}</span>
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li><a className="dropdown-item" href="#" onClick={logout}>Logout</a></li>
+                    </ul>
+                  </div>
+                ) : (
+                  <Link to="/login">
+                    <i className="bi bi-person fs-5 text-dark"></i>
+                  </Link>
+                )}
               </li>
               <li className="nav-item position-relative">
                 <Link to="/wishlist" className={isActive('/wishlist') ? "active" : ""}>

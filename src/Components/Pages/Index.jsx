@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -12,7 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Index() {
-  const [filterSortOption] = useState('all'); // variable kept for future use
+  // const [filterSortOption] = useState('all'); // variable kept for future use
 
   // Add to wishlist, safely initializing the array
   const addToWishlist = (product) => {

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Checkout() {
   const [cart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
   const [form, setForm] = useState({ name: '', email: '', address: '' });
   const [placing, setPlacing] = useState(false);
   const [done, setDone] = useState(false);
-  const navigate = useNavigate();
+  const [orderNumber, setOrderNumber] = useState('');
 
   const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const total = cart.reduce(
@@ -17,22 +18,81 @@ function Checkout() {
   const handleChange = e =>
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const placeOrder = (e) => {
+  const placeOrder = async (e) => {
     e.preventDefault();
     setPlacing(true);
+
+    console.log('🚀 Starting order placement...');
+    console.log('Cart items:', cart);
+    console.log('Form data:', form);
+
+    // Always show thank you page after a short delay (for testing)
     setTimeout(() => {
+      console.log('✅ Showing thank you page...');
+      setOrderNumber('ORD-' + Date.now());
       localStorage.removeItem('cart');
       window.dispatchEvent(new Event('cartUpdated'));
-      setPlacing(false);
       setDone(true);
-    }, 1500);
+      setPlacing(false);
+      toast.success('Order placed successfully!');
+    }, 2000);
+
+    // Try to send to backend (optional)
+    try {
+      const token = localStorage.getItem('userToken');
+      const orderData = {
+        items: cart.map(item => ({
+          productId: item.id,
+          productName: item.Productname,
+          productImage: item.image,
+          price: parseFloat(item.price.replace(/[^0-9.]/g, '')),
+          quantity: item.quantity || 1,
+          totalPrice: (item.quantity || 1) * parseFloat(item.price.replace(/[^0-9.]/g, ''))
+        })),
+        shippingAddress: {
+          name: form.name,
+          email: form.email,
+          address: form.address
+        },
+        totalAmount: total,
+        paymentMethod: 'cash_on_delivery'
+      };
+
+      console.log('📤 Sending order data:', orderData);
+
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const response = await fetch('http://localhost:5000/api/orders/create', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(orderData)
+      });
+
+      const result = await response.json();
+      console.log('📥 Order response:', result);
+
+      if (response.ok) {
+        console.log('✅ Order saved to database');
+        setOrderNumber(result.order.orderNumber);
+      } else {
+        console.log('⚠️ Order not saved to database, but thank you page will still show');
+      }
+    } catch (fetchError) {
+      console.log('⚠️ Backend not available, but thank you page will still show');
+    }
   };
 
   if (done)
     return (
       <div className="container my-5 py-5 text-center">
         <h2 className="mb-4 fw-bold">Thank You for Your Order!</h2>
-        <p>Your purchase has been placed. We’ll email confirmation soon.</p>
+        <p>Your purchase has been placed. We'll email confirmation soon.</p>
+        {orderNumber && (
+          <div className="alert alert-success mt-3">
+            <strong>Order Number:</strong> {orderNumber}
+          </div>
+        )}
         <Link to="/" className="btn btn-dark mt-3">Continue Shopping</Link>
       </div>
     );

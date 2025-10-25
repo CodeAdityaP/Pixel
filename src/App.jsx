@@ -1,18 +1,76 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import Nav from './Components/Nav/Nav';
+import Footer from './Components/Footer/Footer';
 import Index from './Components/Pages/Index';
 import ProductDetails from './Components/Pages/ProductDetails';
 import Wishlist from './Components/Pages/Wishlist';
-import Cart from './Components/Pages/Cart'; // Ensure this file exists and exports Cart component
+import Cart from './Components/Pages/Cart';
 import About from './Components/Pages/About';
 import Shop from './Components/Pages/Shop';
 import Checkout from './Components/Pages/Checkout';
+import Login from './Components/Pages/Login';
 
+// Component to conditionally render footer
+function ConditionalFooter() {
+  const location = useLocation();
+  
+  // Don't show footer on checkout page
+  if (location.pathname === '/checkout') {
+    return null;
+  }
+  
+  return <Footer />;
+}
 
 function App() {
+  // 🧠 Signup handler
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+
+    try {
+      const res = await fetch("http://localhost:5000/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      console.log("✅ Signup success:", data);
+      alert("User registered successfully!");
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Error while signing up");
+    }
+  };
+
+  // 🔐 Login handler
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+      const res = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      console.log("✅ Login success:", data);
+      alert("Login successful!");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Invalid email or password");
+    }
+  };
+
   return (
-    <>
+    <AuthProvider>
       <Nav />
       <Routes>
         <Route path="/" element={<Index />} />
@@ -22,17 +80,12 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
+      <ConditionalFooter />
 
-
-      {/* Signup Modal */}
-      <div
-        className="modal fade"
-        id="signupModal"
-        tabIndex="-1"
-        aria-labelledby="signupModalLabel"
-        aria-hidden="true"
-      >
+      {/* 🧾 Signup Modal */}
+      <div className="modal fade" id="signupModal" tabIndex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -40,7 +93,7 @@ function App() {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleSignup}>
                 <div className="mb-3">
                   <label htmlFor="signupEmail" className="form-label">Email address</label>
                   <input type="email" className="form-control" id="signupEmail" required />
@@ -56,14 +109,8 @@ function App() {
         </div>
       </div>
 
-      {/* Login Modal */}
-      <div
-        className="modal fade"
-        id="loginModal"
-        tabIndex="-1"
-        aria-labelledby="loginModalLabel"
-        aria-hidden="true"
-      >
+      {/* 🔐 Login Modal */}
+      <div className="modal fade" id="loginModal" tabIndex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -71,7 +118,7 @@ function App() {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="mb-3">
                   <label htmlFor="loginEmail" className="form-label">Email address</label>
                   <input type="email" className="form-control" id="loginEmail" required />
@@ -87,14 +134,8 @@ function App() {
         </div>
       </div>
 
-      {/* Search Modal */}
-      <div
-        className="modal fade"
-        id="searchModal"
-        tabIndex="-1"
-        aria-labelledby="searchModalLabel"
-        aria-hidden="true"
-      >
+      {/* 🔍 Search Modal */}
+      <div className="modal fade" id="searchModal" tabIndex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -112,7 +153,7 @@ function App() {
           </div>
         </div>
       </div>
-    </>
+    </AuthProvider>
   );
 }
 
