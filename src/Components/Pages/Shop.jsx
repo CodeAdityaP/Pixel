@@ -3,19 +3,11 @@ import Products from '../../Products.json';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const images = {
-  "pro-1-1.webp": new URL("../../assets/Images/pro-1-1.webp", import.meta.url).href,
-  "pro-2-1.webp": new URL("../../assets/Images/pro-2-1.webp", import.meta.url).href,
-  "pro-2.webp": new URL("../../assets/Images/pro-2.webp", import.meta.url).href,
-  "pro-3-1.webp": new URL("../../assets/Images/pro-3-1.webp", import.meta.url).href,
-  "pro-3.webp": new URL("../../assets/Images/pro-3.webp", import.meta.url).href,
-  // ...add all needed
-};
-
+// Helper function to get image paths from public folder
 const getImg = (imgPath) => {
   if (!imgPath) return "";
-  const fileName = imgPath.split('/').pop();
-  return images[fileName] || "";
+  // Images are in public/Images folder, so we can use the path directly
+  return imgPath.startsWith('/') ? imgPath : `/${imgPath}`;
 };
 
 function Shop() {
