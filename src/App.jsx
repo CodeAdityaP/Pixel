@@ -11,6 +11,7 @@ import About from './Components/Pages/About';
 import Shop from './Components/Pages/Shop';
 import Checkout from './Components/Pages/Checkout';
 import Login from './Components/Pages/Login';
+import SearchModal from './Components/SearchModal';
 
 // Component to conditionally render footer
 function ConditionalFooter() {
@@ -135,24 +136,7 @@ function App() {
       </div>
 
       {/* 🔍 Search Modal */}
-      <div className="modal fade" id="searchModal" tabIndex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="searchModalLabel">Search</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="mb-3">
-                  <input type="text" className="form-control" id="searchInput" placeholder="Type to search..." autoFocus />
-                </div>
-                <button type="submit" className="btn btn-primary w-100">Search</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SearchModal />
     </AuthProvider>
   );
 }
