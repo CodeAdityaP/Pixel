@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true,
     lowercase: true,
     trim: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
@@ -63,9 +62,13 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better query performance
-userSchema.index({ email: 1 });
-userSchema.index({ createdAt: -1 });
+// Index for better query performance (only if indexes don't already exist)
+if (!userSchema.indexes().find(idx => idx[0].email)) {
+  userSchema.index({ email: 1 });
+}
+if (!userSchema.indexes().find(idx => idx[0].createdAt)) {
+  userSchema.index({ createdAt: -1 });
+}
 
 // Virtual for user's full profile
 userSchema.virtual('profile').get(function() {

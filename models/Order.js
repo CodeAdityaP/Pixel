@@ -8,7 +8,6 @@ const orderSchema = new mongoose.Schema({
   },
   orderNumber: {
     type: String,
-    unique: true,
     required: true
   },
   items: [{
@@ -131,11 +130,19 @@ const orderSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better query performance
-orderSchema.index({ user: 1, createdAt: -1 });
-orderSchema.index({ orderNumber: 1 });
-orderSchema.index({ status: 1 });
-orderSchema.index({ paymentStatus: 1 });
+// Index for better query performance (only if indexes don't already exist)
+if (!orderSchema.indexes().find(idx => idx[0].orderNumber)) {
+  orderSchema.index({ orderNumber: 1 });
+}
+if (!orderSchema.indexes().find(idx => idx[0].user && idx[0].createdAt)) {
+  orderSchema.index({ user: 1, createdAt: -1 });
+}
+if (!orderSchema.indexes().find(idx => idx[0].status)) {
+  orderSchema.index({ status: 1 });
+}
+if (!orderSchema.indexes().find(idx => idx[0].paymentStatus)) {
+  orderSchema.index({ paymentStatus: 1 });
+}
 
 // Pre-save middleware to generate order number
 orderSchema.pre('save', async function(next) {

@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "populate": "node scripts/populateProducts.js"
+    "populate": "node scripts/populateProducts.js",
+    "server": "node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^5.2.0",

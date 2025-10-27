@@ -1,12 +1,24 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import User from '../models/User.js';
 
 const router = express.Router();
 
+// Helper to check if database is connected
+const checkDatabase = (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ 
+      message: 'Database not available. Running in demo mode without user accounts.',
+      demoMode: true
+    });
+  }
+  next();
+};
+
 // Register a new user
-router.post('/register', async (req, res) => {
+router.post('/register', checkDatabase, async (req, res) => {
   try {
     const { name, email, password, address } = req.body;
 
@@ -54,7 +66,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Login user
-router.post('/login', async (req, res) => {
+router.post('/login', checkDatabase, async (req, res) => {
   try {
     const { email, password } = req.body;
 
